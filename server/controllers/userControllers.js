@@ -6,7 +6,7 @@ const basicConfig = require("../config/basicConfig");
 module.exports = {
   addUser: async (req, res) => {
     try {
-      let { name, email, password } = req.body;
+      let { name, email, password ,course } = req.body;
       let isUserexists = await userServices.getUserByUserEmail(email);
 
       // send error if user exists
@@ -18,7 +18,7 @@ module.exports = {
 
       // encrypt password
       password = await bcrypt.hash(password, 10);
-      let user = await userServices.saveUser({ name, email, password });
+      let user = await userServices.saveUser({ name, email, password,course });
 
       const acces_tocken = createAccessToken({
         name: user.fullname,

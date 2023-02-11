@@ -19,14 +19,13 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    course:{
+        type:String,
+        require:true
+    },
     avatar:{
         type: String,
         default: basicConfig.INITIAL_PROFIE
-    },
-    mobile: {type: Number, default: ''},
-    isBanned:{
-        type:Boolean,
-        default:false
     },
 },{
     timestamps:true
