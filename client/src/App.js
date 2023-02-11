@@ -5,11 +5,11 @@ import Home from "./pages/Home";
 import AdminHome from "./components/Admin/AdminHome";
 import { Box } from "@mui/system";
 import AdminSidbar from "./components/Admin/AdminSidbar";
-import UsersList from "./components/Admin/UsersList";
 import Applications from "./components/Admin/Applications";
 import Signup from "./pages/Singup";
 import { refreshToken } from "./redux/actions/userActions";
 import { useEffect } from "react";
+import Classes from "./components/Admin/Classes";
 
 function App() {
   const isAdmin = window.location.pathname.split("/").includes("admin");
@@ -52,9 +52,8 @@ function Admin() {
           <AdminSidbar drawerWidth={drawerWidth} />
           <Routes>
             <Route path="/admin" element={<AdminHome />}></Route>
-            <Route path="/admin/users" element={<UsersList />}></Route>
             <Route path="/admin/applications" element={<Applications drawerWidth={drawerWidth} />}></Route>
-            <Route path="/admin/users" element={<UsersList />}></Route>
+            <Route path="/admin/classes" element={<Classes />}></Route>
 
           </Routes>
         </BrowserRouter>

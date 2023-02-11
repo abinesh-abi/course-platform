@@ -68,6 +68,7 @@ function Home({ drawerWidth }) {
                 {user.user.name}
               </Typography>
             </Typography>
+            {/* logout */}
             <Logout />
           </Toolbar>
         </AppBar>
@@ -76,7 +77,7 @@ function Home({ drawerWidth }) {
       <Box>
         <Toolbar />
         <Box display={"flex"} justifyContent="center" marginTop={"40px"}>
-          <Typography variant="h4">{user.user.course}</Typography>
+          <Typography variant="h4">{user.user.courseDetails?.name}</Typography>
         </Box>
         <Container maxWidth='lg'>
           <Grid  container gap={3}>

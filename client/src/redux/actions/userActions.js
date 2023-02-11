@@ -1,16 +1,15 @@
 import { postDataAPI } from "../../utils/fetchData";
 
-
 export const USER_TYPES = {
-    AUTH:'AUTH',
-    ALERT:'ALERT',
-    ERROR:'ERROR'
-}
+  AUTH: "AUTH",
+  ALERT: "ALERT",
+  ERROR: "ERROR",
+};
 
 export const registerUser = (data) => async (dispatch) => {
   try {
     const val = await postDataAPI("/register", data);
-    if(!val.data.status) return
+    if (!val.data.status) return;
 
     dispatch({
       type: USER_TYPES.AUTH,
@@ -42,22 +41,46 @@ export const login = (data) => async (dispatch) => {
   try {
     const val = await postDataAPI("/login", data);
 
+    if (!val.status) {
+      dispatch({
+        type: USER_TYPES.ERROR,
+        payload: {
+          error: val.data.message,
+        },
+      });
+      return;
+    }
+
+
     dispatch({
       type: USER_TYPES.AUTH,
       payload: {
         token: val.data.acces_tocken,
         user: val.data.user,
-        error:val.data.message
+        error: val.data.message,
       },
     });
 
     localStorage.setItem("firstLogin", true);
-
   } catch (err) {
     dispatch({
       type: USER_TYPES.ERROR,
       payload: {
         error: err.message,
+      },
+    });
+  }
+};
+export const logout = () => async (dispatch) => {
+  try {
+    localStorage.removeItem("firstLogin");
+    await postDataAPI("/logout");
+    window.location.href = "/";
+  } catch (err) {
+    dispatch({
+      type: USER_TYPES.ERROR,
+      payload: {
+        error: err.response.data.msg,
       },
     });
   }

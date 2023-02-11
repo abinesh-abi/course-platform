@@ -7,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Courses from "@mui/icons-material/ImportContacts";
 import Users from "@mui/icons-material/PeopleAltRounded";
-import Application from '@mui/icons-material/FactCheckRounded';
+import Classes from '@mui/icons-material/School';
 
 
 
@@ -16,15 +16,15 @@ import { useNavigate } from "react-router-dom";
 function Sideitems() {
   let course = <Courses />;
   let users = <Users />;
-  let application = <Application/>
+  let classes = <Classes />
   return (
     <>
       <Toolbar />
       <Divider />
       <List>
         <SideElem content={"Course"} icon={course} link='/admin' />
-        <SideElem content={"Applications"} icon={application} link="/admin/applications" />
-        <SideElem content={"Users"} icon={users} link="/admin/users" />
+        <SideElem content={"Applicants"} icon={users} link="/admin/applications" />
+        <SideElem content={"Classes"} icon={classes} link="/admin/classes" />
       </List>
     </>
   );

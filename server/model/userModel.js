@@ -1,5 +1,4 @@
 const { default: mongoose } = require("mongoose");
-const basicConfig = require("../config/basicConfig");
 
 
 const schema = new mongoose.Schema({
@@ -20,16 +19,13 @@ const schema = new mongoose.Schema({
         required: true
     },
     course:{
-        type:String,
+        type:mongoose.Types.ObjectId,
+        ref: 'course',
         require:true
     },
     approved:{
         type:Boolean,
         default:false
-    },
-    avatar:{
-        type: String,
-        default: basicConfig.INITIAL_PROFIE
     },
 },{
     timestamps:true

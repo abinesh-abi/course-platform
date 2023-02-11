@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { getDataAPI, patchDataAPI } from "../../utils/fetchData";
+import ClassesForm from "./ClassesForm";
 
-function Applications({ drawerWidth }) {
-  const [applicant, setApplicant] = useState([]);
+function Classes({ drawerWidth }) {
+  const [classes, setClasses] = useState([])
   const columns = [
     { field: "id", headerName: "ID", width: 70, flex: 1 },
     { field: "name", headerName: "Name", width: 70, flex: 1 },
@@ -22,32 +23,33 @@ function Applications({ drawerWidth }) {
             Approved
           </Typography>
         ) : (
-          <Button variant="contained" onClick={()=>approve(props.row._id)}>Approve</Button>
+          <Button variant="contained" onClick={() => approve(props.row._id)}>
+            Approve
+          </Button>
         );
       },
     },
   ];
 
-  function approve(id){
-    patchDataAPI('/admin/approveUser/'+id)
-    .then(({data})=>{
-      if(data.status){
-        setApplicant(state=>{
-          return state.map(val=>{
-            if(val._id ===id){
-               return {...val,approved:true}
-            }  
-            return val
-          })
-        })
+  function approve(id) {
+    patchDataAPI("/admin/approveUser/" + id).then(({ data }) => {
+      if (data.status) {
+        setClasses((state) => {
+          return state.map((val) => {
+            if (val._id === id) {
+              return { ...val, approved: true };
+            }
+            return val;
+          });
+        });
       }
-    })
+    });
   }
 
   useEffect(() => {
     getDataAPI("/admin/getApplicants").then(({ data }) => {
       if (data.status) {
-        setApplicant(
+        setClasses(
           data.users.map((val, id) => {
             return { ...val, id: id + 1, course: val.courseDetails.name };
           })
@@ -67,10 +69,14 @@ function Applications({ drawerWidth }) {
         }}
       >
         <Toolbar />
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {/* add course form */}
+          <ClassesForm />
+        </Box>
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             density="comfortable"
-            rows={applicant}
+            rows={classes}
             columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5]}
@@ -82,4 +88,4 @@ function Applications({ drawerWidth }) {
   );
 }
 
-export default Applications;
+export default Classes;

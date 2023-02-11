@@ -7,9 +7,9 @@ const { getCourseList } = require("../services/userServices");
 module.exports = {
   registerUser: async (req, res) => {
     try {
-      let { name, email, password ,course } = req.body;
+      let { name, email, password, course } = req.body;
       let isUserexists = await userServices.getUserByUserEmail(email);
-      
+
       // send error if user exists
       if (isUserexists)
         return res.json({
@@ -19,7 +19,7 @@ module.exports = {
 
       // encrypt password
       password = await bcrypt.hash(password, 10);
-      let user = await userServices.saveUser({ name, email, password,course });
+      let user = await userServices.saveUser({ name, email, password, course });
 
       const acces_tocken = createAccessToken({
         name: user.fullname,
@@ -51,18 +51,22 @@ module.exports = {
     try {
       let { email, password } = req.body;
       let user = await userServices.getUserByUserEmail(email);
-
       if (!user)
         return res.json({
           status: false,
           message: "You don't have account",
         });
 
+      if (!user.approved) {
+        return res.json({
+          status: false,
+          message: "Admin did not approved your registration",
+        });
+      }
 
       let passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch)
         return res.json({ status: false, message: "Incorrect Password" });
-
 
       const acces_tocken = createAccessToken({
         name: user.name,
@@ -83,11 +87,19 @@ module.exports = {
         status: true,
         message: "Login Success",
         acces_tocken,
-        user: { ...user._doc, password: "" },
+        user: { ...user, password: "" },
         // refresh_tocken
       });
     } catch (error) {
       return res.json({ status: false, message: error.message });
+    }
+  },
+  logout: async (req, res) => {
+    try {
+      res.clearCookie("refreshtoken", { path: "/refresh_token" });
+      res.json({ status: true, message: "Logged Out" });
+    } catch (error) {
+      return res.status(500).json({ status: false, message: error.message });
     }
   },
   generateAcceTocken: async (req, res) => {
@@ -119,28 +131,19 @@ module.exports = {
           });
         }
       );
-
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
   },
-  getCoursesList:async(req,res)=>{
+  getCoursesList: async (req, res) => {
     try {
-      let courses = await getCourseList()
-      res.json({status:true,courses})
+      let courses = await getCourseList();
+      res.json({ status: true, courses });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
-  }
+  },
 };
-
-
-
-
-
-
-
-
 
 const createAccessToken = (payload) => {
   return jwt.sign(payload, basicConfig.ACCESS_TOKEN_SECRET, {

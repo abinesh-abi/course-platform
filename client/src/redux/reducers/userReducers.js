@@ -6,6 +6,8 @@ const autheReducer = (state = intialSatate, action) => {
   switch (action.type) {
     case USER_TYPES.AUTH:
       return action.payload;
+    case USER_TYPES.ERROR:
+      return action.payload;
     default:
       return state;
   }

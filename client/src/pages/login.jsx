@@ -18,18 +18,6 @@ import { useForm } from "react-hook-form";
 const theme = createTheme();
 
 function Login() {
-  // function refresh() {
-  //   axios.post(
-  //     "http://127.0.0.1:5000/refresh_token",
-  //     {},
-  //     {
-  //       withCredentials: true,
-  //       credentials: 'include'
-  //     }
-  //   ).then(({data})=>console.log(data))
-  // }
-
-  // const [error, setError] = useState("");
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
 
