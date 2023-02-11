@@ -23,7 +23,7 @@ function Sideitems() {
       <Divider />
       <List>
         <SideElem content={"Course"} icon={course} link='/admin' />
-        <SideElem content={"Applications"} icon={users} link="/admin/applications" />
+        <SideElem content={"Applications"} icon={application} link="/admin/applications" />
         <SideElem content={"Users"} icon={users} link="/admin/users" />
       </List>
     </>

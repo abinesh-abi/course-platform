@@ -23,6 +23,10 @@ const schema = new mongoose.Schema({
         type:String,
         require:true
     },
+    approved:{
+        type:Boolean,
+        default:false
+    },
     avatar:{
         type: String,
         default: basicConfig.INITIAL_PROFIE

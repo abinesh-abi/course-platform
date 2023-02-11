@@ -2,13 +2,14 @@ const userServices = require("../services/userServices");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const basicConfig = require("../config/basicConfig");
+const { getCourseList } = require("../services/userServices");
 
 module.exports = {
-  addUser: async (req, res) => {
+  registerUser: async (req, res) => {
     try {
       let { name, email, password ,course } = req.body;
       let isUserexists = await userServices.getUserByUserEmail(email);
-
+      
       // send error if user exists
       if (isUserexists)
         return res.json({
@@ -28,7 +29,6 @@ module.exports = {
         name: user.fullname,
         id: user._id,
       });
-      console.log(refresh_tocken);
 
       res.cookie("refreshtoken", refresh_tocken, {
         httpOnly: true,
@@ -124,7 +124,23 @@ module.exports = {
       return res.json({ status: false, message: error.message });
     }
   },
+  getCoursesList:async(req,res)=>{
+    try {
+      let courses = await getCourseList()
+      res.json({status:true,courses})
+    } catch (error) {
+      return res.json({ status: false, message: error.message });
+    }
+  }
 };
+
+
+
+
+
+
+
+
 
 const createAccessToken = (payload) => {
   return jwt.sign(payload, basicConfig.ACCESS_TOKEN_SECRET, {

@@ -1,16 +1,26 @@
 import Login from "./pages/login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Home from "./pages/Home";
 import AdminHome from "./components/Admin/AdminHome";
 import { Box } from "@mui/system";
 import AdminSidbar from "./components/Admin/AdminSidbar";
 import UsersList from "./components/Admin/UsersList";
 import Applications from "./components/Admin/Applications";
+import Signup from "./pages/Singup";
+import { refreshToken } from "./redux/actions/userActions";
+import { useEffect } from "react";
 
 function App() {
   const isAdmin = window.location.pathname.split("/").includes("admin");
   const { user } = useSelector((state) => state);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(refreshToken());
+    // dispatch(adminRefreshToken());
+  }, [dispatch]);
+
   return isAdmin ? (
     <Admin />
   ) : (
@@ -21,6 +31,7 @@ function App() {
           path="/login"
           element={ user.token ? <Home /> : <Login />}
         ></Route>
+        <Route path="/signup" element={ <Signup />}></Route>
 
         {/* admin */}
       </Routes>

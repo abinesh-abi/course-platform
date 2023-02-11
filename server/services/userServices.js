@@ -1,3 +1,4 @@
+const courseModel = require("../model/courseModel");
 const userModel = require("../model/userModel");
 
 module.exports = {
@@ -17,11 +18,20 @@ module.exports = {
         .catch((error) => reject(error));
     });
   },
-    getUserByUserId: (_id) => {
+  getUserByUserId: (_id) => {
     return new Promise((resolve, reject) => {
-        userModel.findOne({_id}).select('-password')
-        .then(data=>resolve(data))
-        .catch(error=>reject(error))
+      userModel
+        .findOne({ _id })
+        .select("-password")
+        .then((data) => resolve(data))
+        .catch((error) => reject(error));
+    });
+  },
+  getCourseList: (_id) => {
+    return new Promise((resolve, reject) => {
+      courseModel.find({})
+        .then((data) => resolve(data))
+        .catch((error) => reject(error));
     });
   },
 };

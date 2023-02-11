@@ -81,7 +81,7 @@ function Home({ drawerWidth }) {
         <Container maxWidth='lg'>
           <Grid  container gap={3}>
             {tempCourse.map((val, i) => {
-              return <CourseItems {...val} />;
+              return <CourseItems key={i} {...val} />;
             })}
           </Grid>
         </Container>

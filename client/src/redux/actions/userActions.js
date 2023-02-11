@@ -7,6 +7,36 @@ export const USER_TYPES = {
     ERROR:'ERROR'
 }
 
+export const registerUser = (data) => async (dispatch) => {
+  try {
+    const val = await postDataAPI("/register", data);
+    if(!val.data.status) return
+
+    dispatch({
+      type: USER_TYPES.AUTH,
+      payload: {
+        token: val.data.acces_tocken,
+        user: val.data.user,
+      },
+    });
+
+    localStorage.setItem("firstLogin", true);
+
+    dispatch({
+      type: USER_TYPES.ERROR,
+      payload: {
+        message: val.data.message,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: USER_TYPES.ERROR,
+      payload: {
+        error: err.message,
+      },
+    });
+  }
+};
 
 export const login = (data) => async (dispatch) => {
   try {

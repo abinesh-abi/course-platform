@@ -1,10 +1,10 @@
-import React, { useEffect,} from "react";
+import React from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { login, refreshToken } from "../redux/actions/userActions";
+import { login, } from "../redux/actions/userActions";
 import { useForm } from "react-hook-form";
 
 const theme = createTheme();
@@ -33,10 +33,6 @@ function Login() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
 
-  useEffect(() => {
-    dispatch(refreshToken());
-    // dispatch(adminRefreshToken());
-  }, [dispatch]);
 
   const {
     register,
@@ -120,11 +116,11 @@ function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to={'/signup'} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

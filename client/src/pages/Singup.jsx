@@ -1,50 +1,56 @@
-import React, { useEffect,} from "react";
+import React, {  useState } from "react";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useDispatch, useSelector } from "react-redux";
-import { login, refreshToken } from "../redux/actions/userActions";
+import {  useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getDataAPI, postDataAPI } from "../utils/fetchData";
 
 const theme = createTheme();
 
-function Login() {
-  // function refresh() {
-  //   axios.post(
-  //     "http://127.0.0.1:5000/refresh_token",
-  //     {},
-  //     {
-  //       withCredentials: true,
-  //       credentials: 'include'
-  //     }
-  //   ).then(({data})=>console.log(data))
-  // }
+function Signup() {
 
-  // const [error, setError] = useState("");
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
+  const [allCourses, setAllCourses] = useState([])
+  const [selectedCourse, setSelectedCourse] = useState('')
+  const [courseErr, setCourseErr] = useState('')
+  const naviagate = useNavigate()
 
-  useEffect(() => {
-    dispatch(refreshToken());
-    // dispatch(adminRefreshToken());
-  }, [dispatch]);
+  useEffect(()=>{
+    getDataAPI('/get_course_list')
+    .then(({data})=>{
+      setAllCourses(data.courses)
+    })
+  },[])
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
-    dispatch(login(data));
+    if(!selectedCourse)return setCourseErr('Chose Any one of the course')
+    setCourseErr('')
+    // dispatch(registerUser({...data,course:selectedCourse}));
+    postDataAPI("/register", {...data,course:selectedCourse})
+    .then(({data})=>{
+      console.log(data,'data---------')
+      if(data.status){
+        naviagate('/login')
+      }
+    })
   };
 
   return (
@@ -63,7 +69,7 @@ function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
           <Typography paddingTop={"2px"} color={"error"}>
             {user.error}
@@ -74,6 +80,23 @@ function Login() {
             noValidate
             sx={{ mt: 1 }}
           >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              autoComplete="name"
+              {...register("name", {
+                required: true,
+                pattern: /[a-zA-Z]$/i,
+              })}
+            />
+            <Typography paddingTop={"2px"} color={"error"}>
+              {errors.name?.type === "required" && "Name is required"}
+              {errors.name?.type === "pattern" && "Enter valied Characters"}
+            </Typography>
             <TextField
               margin="normal"
               required
@@ -114,6 +137,13 @@ function Login() {
               {errors.password?.type === "maxLength" &&
                 "Password must less than 20 digit"}
             </Typography>
+
+            {/* selct course dropdown */}
+            <SelectCourse setSelectedCourse={setSelectedCourse} allCourses={allCourses} />
+
+            <Typography paddingTop={"2px"} color={"error"}>
+              {courseErr}
+            </Typography>
             <Button
               type="submit"
               fullWidth
@@ -124,8 +154,8 @@ function Login() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link to={"/login"} variant="body2">
+                  {"Already have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
@@ -136,4 +166,32 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
+
+function SelectCourse({ setSelectedCourse ,allCourses }) {
+  const [course, setCourse] = useState('')
+
+  const handleChange = (event) => {
+    setCourse(event.target.value);
+    setSelectedCourse(event.target.value)
+  };
+
+  return (
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Course</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={course}
+          label="course"
+          onChange={handleChange}
+        >
+          {
+            allCourses.map(val=><MenuItem key={val._id} value={val._id}>{val.name}</MenuItem> )
+          }
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
