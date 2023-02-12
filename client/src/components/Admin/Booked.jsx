@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { getDataAPI } from "../../utils/fetchData";
 import ClassesForm from "./ClassesForm";
 import ExportToExcel from "../comon/ExportToExcel";
+import ExportToPdf from "../comon/ExportToPdf";
 
 export default function Booked({ drawerWidth }) {
   const [classes, setClasses] = useState([]);
@@ -19,9 +20,9 @@ export default function Booked({ drawerWidth }) {
       headerName: "Date",
       width: 70,
       flex: 1,
-      valueFormatter: ({ value }) => new Date(value).toDateString(), },
+      valueFormatter: ({ value }) => new Date(value).toDateString(),
+    },
   ];
-
 
   useEffect(() => {
     getDataAPI("/admin/getBookedClasses").then(({ data }) => {
@@ -50,9 +51,12 @@ export default function Booked({ drawerWidth }) {
           {/* add course form */}
           <ClassesForm />
         </Box>
-        <div style={{ height: 400, width: "100%" }}>
-       {/* <ExportToExcel  */}
-       <ExportToExcel apiData={classes} fileName={'booked'} />
+        <div style={{ height: 400, width: "100%", marginTop: "20px" }}>
+          {/* <ExportToExcel  */}
+          <Box display={"flex"} gap="12px" marginBottom="5px">
+            <ExportToExcel apiData={classes} fileName={"booked"} />
+            <ExportToPdf data={classes} />
+          </Box>
           <DataGrid
             density="comfortable"
             rows={classes}
@@ -65,6 +69,3 @@ export default function Booked({ drawerWidth }) {
     </>
   );
 }
-
-
-

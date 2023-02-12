@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
@@ -15,6 +16,6 @@ export default function ExportToExcel({ apiData, fileName }) {
   };
 
   return (
-    <button onClick={(e) => exportToCSV(apiData, fileName)}>Export</button>
+    <Button variant="outlined" onClick={(e) => exportToCSV(apiData, fileName)}>Export To Execel</Button>
   );
 }
