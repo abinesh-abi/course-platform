@@ -20,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export default function CourseForm({ updtaeList }) {
+export default function CourseForm({ updateList }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const handleOpen = () => setOpen(true);
@@ -36,7 +36,7 @@ export default function CourseForm({ updtaeList }) {
     postDataAPI("/admin/addCourse", value)
       .then(({ data }) => {
         if (data.status) {
-          updtaeList(state=>[data?.course,...state])
+          updateList(state=>[data?.course,...state])
           handleClose()
         }else setError(data.message)
       })

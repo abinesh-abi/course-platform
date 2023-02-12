@@ -1,4 +1,4 @@
-const { getApplicants, approveUser } = require("../services/adminServices");
+const { getApplicants, approveUser, getClasses } = require("../services/adminServices");
 const adminServices = require("../services/adminServices");
 
 module.exports = {
@@ -69,4 +69,14 @@ module.exports = {
       return res.json({ status: false, message: error.message });
     }
   },
+
+  getClasses: async (req, res) => {
+    try {
+      let classes = await getClasses();
+      res.json({ status: true, classes: classes });
+    } catch (error) {
+      return res.json({ status: false, message: error.message });
+    }
+  },
+  
 };

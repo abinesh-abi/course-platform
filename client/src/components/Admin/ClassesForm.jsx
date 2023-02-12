@@ -21,7 +21,7 @@ const style = {
   p: 4,
 };
 
-export default function ClassesForm({ updtaeList }) {
+export default function ClassesForm({updateList}) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [allCourses, setAllCourses] = useState([])
@@ -49,8 +49,8 @@ export default function ClassesForm({ updtaeList }) {
       .then(({ data }) => {
         console.log(data,'data---------------')
         // if (data.status) {
-        //   updtaeList((state) => [data?.course, ...state]);
-        //   handleClose();
+        //   updateList((state) => [data?.course, ...state]);
+          handleClose();
         // } else setError(data.message);
       })
       .catch((err) => setError(err.message));

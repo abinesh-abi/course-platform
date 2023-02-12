@@ -13,6 +13,7 @@ router.patch('/approveUser/:id',adminControllers.approveUser)
 
 // calss
 router.post('/addClass',adminControllers.addClass)
+router.get('/getClasses',adminControllers.getClasses)
 
 
 module.exports = router

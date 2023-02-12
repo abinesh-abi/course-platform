@@ -76,4 +76,21 @@ module.exports = {
         .catch(reject);
     });
   },
+  getClasses: () => {
+    return new Promise((resolve, reject) => {
+      courseModel
+        .aggregate([
+          { $match: {} },
+          {$unwind:'$classes'},
+          {$project:{
+            name:'$classes.title',
+            course:'$name',
+            date:"$classes.date",
+            description:'$classes.description'
+          }}
+        ])
+        .then(resolve)
+        .catch((error) => reject(error));
+    });
+  },
 };

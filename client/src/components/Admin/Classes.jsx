@@ -10,25 +10,26 @@ function Classes({ drawerWidth }) {
   const columns = [
     { field: "id", headerName: "ID", width: 70, flex: 1 },
     { field: "name", headerName: "Name", width: 70, flex: 1 },
-    { field: "email", headerName: "Email", width: 70, flex: 1 },
     { field: "course", headerName: "Course", width: 70, flex: 1 },
-    {
-      field: "approved",
-      headerName: "Approved",
-      width: 70,
-      flex: 1,
-      renderCell: (props) => {
-        return props.row.approved ? (
-          <Typography variant="body1" color={"green"}>
-            Approved
-          </Typography>
-        ) : (
-          <Button variant="contained" onClick={() => approve(props.row._id)}>
-            Approve
-          </Button>
-        );
-      },
-    },
+    { field: "date", headerName: "Date", width: 70, flex: 1 },
+
+    // {
+    //   field: "approved",
+    //   headerName: "Approved",
+    //   width: 70,
+    //   flex: 1,
+    //   renderCell: (props) => {
+    //     return props.row.approved ? (
+    //       <Typography variant="body1" color={"green"}>
+    //         Approved
+    //       </Typography>
+    //     ) : (
+    //       <Button variant="contained" onClick={() => approve(props.row._id)}>
+    //         Approve
+    //       </Button>
+    //     );
+    //   },
+    // },
   ];
 
   function approve(id) {
@@ -47,11 +48,11 @@ function Classes({ drawerWidth }) {
   }
 
   useEffect(() => {
-    getDataAPI("/admin/getApplicants").then(({ data }) => {
+    getDataAPI("/admin/getClasses").then(({ data }) => {
       if (data.status) {
         setClasses(
-          data.users.map((val, id) => {
-            return { ...val, id: id + 1, course: val.courseDetails.name };
+          data.classes.map((val, id) => {
+            return { ...val, id: id + 1 };
           })
         );
       }

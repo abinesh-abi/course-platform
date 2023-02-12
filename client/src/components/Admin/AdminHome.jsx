@@ -51,7 +51,7 @@ function AdminHome({ drawerWidth }) {
         <Toolbar />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {/* add course form */}
-          <CourseForm updtaeList={setRows} />
+          <CourseForm updateList={setRows} />
         </Box>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
