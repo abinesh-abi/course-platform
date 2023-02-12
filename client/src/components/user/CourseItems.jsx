@@ -5,7 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, CardActions } from '@mui/material';
 
-function CourseItems({title,content,date}) {
+function CourseItems({title,description,date}) {
      return (
     <Card sx={{ maxWidth: 250 }}>
       <CardActionArea>
@@ -20,7 +20,7 @@ function CourseItems({title,content,date}) {
             {title}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {content}
+            {description}
           </Typography>
           <Typography variant="body1" marginTop={'10px'}>
             {date}

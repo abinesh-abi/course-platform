@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const courseModel = require("../model/courseModel");
 const userModel = require("../model/userModel");
 
@@ -55,17 +56,24 @@ module.exports = {
         .catch((error) => reject(error));
     });
   },
-  approveUser:(_id)=>{
+  approveUser: (_id) => {
     return new Promise((resolve, reject) => {
-      userModel.updateOne({_id},{$set:{approved:true}})
-      .then(resolve)
-      .catch(reject)
-    })
+      userModel
+        .updateOne({ _id }, { $set: { approved: true } })
+        .then(resolve)
+        .catch(reject);
+    });
   },
   // class
-  addClass:(body)=>{
+  addClass: (_id, title, date, description) => {
     return new Promise((resolve, reject) => {
-      
-    })
-  }
+      courseModel
+        .updateOne(
+          { _id: mongoose.Types.ObjectId(_id) },
+          { $push: { classes: { title, date, description } } }
+        )
+        .then(resolve)
+        .catch(reject);
+    });
+  },
 };

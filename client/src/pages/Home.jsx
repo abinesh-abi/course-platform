@@ -15,17 +15,6 @@ import CourseItems from "../components/user/CourseItems";
 let tempCourse = [
   { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
   { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
 ];
 
 function Home({ drawerWidth }) {
@@ -81,7 +70,7 @@ function Home({ drawerWidth }) {
         </Box>
         <Container maxWidth='lg'>
           <Grid  container gap={3}>
-            {tempCourse.map((val, i) => {
+            {user.user.courseDetails.classes.map((val, i) => {
               return <CourseItems key={i} {...val} />;
             })}
           </Grid>

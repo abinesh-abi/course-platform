@@ -102,14 +102,14 @@ export default function ClassesForm({ updtaeList }) {
                   label="Class Name"
                   name="name"
                   autoFocus
-                  {...register("name", {
+                  {...register("title", {
                     required: true,
                     pattern: /[a-zA-Z_-]$/gi,
                   })}
                 />
                 <Typography paddingTop={"2px"} color={"error"}>
-                  {errors.name?.type === "required" && "Class Name is required"}
-                  {errors.name?.type === "pattern" && "Enter valied Charecters"}
+                  {errors.title?.type === "required" && "Class Name is required"}
+                  {errors.title?.type === "pattern" && "Enter valied Charecters"}
                 </Typography>
 
                 {/* selct course dropdown */}
@@ -117,6 +117,24 @@ export default function ClassesForm({ updtaeList }) {
                   setSelectedCourse={setSelectedCourse}
                   allCourses={allCourses}
                 />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  type={"text"}
+                  id="description"
+                  label="Class description"
+                  name="description"
+                  autoFocus
+                  {...register("description", {
+                    required: true,
+                    pattern: /[a-zA-Z_-]$/gi,
+                  })}
+                />
+                <Typography paddingTop={"2px"} color={"error"}>
+                  {errors.description?.type === "required" && "Class Name is required"}
+                  {errors.description?.type === "pattern" && "Enter valied Charecters"}
+                </Typography>
 
                 <Typography paddingTop={"2px"}>Choose the date</Typography>
                 <TextField

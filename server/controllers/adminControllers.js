@@ -5,10 +5,14 @@ module.exports = {
   addCourse: async (req, res) => {
     try {
       let { body } = req;
-      let coursExits = await adminServices.courseExits(body.name)
-      if (coursExits)return res.json({status:false,message:'This course is already exits'})
+      let coursExits = await adminServices.courseExits(body.name);
+      if (coursExits)
+        return res.json({
+          status: false,
+          message: "This course is already exits",
+        });
       let course = await adminServices.addCourse(body);
-      res.json({status:true,course});
+      res.json({ status: true, course });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
@@ -23,7 +27,7 @@ module.exports = {
   },
   removeCourse: async (req, res) => {
     try {
-      let id = req.params.id
+      let id = req.params.id;
       let courses = await adminServices.removeCourse(id);
       res.json(courses);
     } catch (error) {
@@ -32,19 +36,19 @@ module.exports = {
   },
 
   // applicats
-  getApplicants:async(req,res)=>{
+  getApplicants: async (req, res) => {
     try {
-      let applicants = await getApplicants()
-      res.json({status:true,users:applicants});
+      let applicants = await getApplicants();
+      res.json({ status: true, users: applicants });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
   },
-  approveUser:async(req,res)=>{
+  approveUser: async (req, res) => {
     try {
-      const id = req.params.id
-      const approved = await approveUser(id)
-      res.json({status:true,data:approved});
+      const id = req.params.id;
+      const approved = await approveUser(id);
+      res.json({ status: true, data: approved });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
@@ -53,10 +57,14 @@ module.exports = {
 
   addClass: async (req, res) => {
     try {
-      let { body } = req;
-      res.json(body)
-      let calss = await adminServices.addClass(body)
-      res.json({status:true,calss});
+      let { course, date, title, description } = req.body;
+      let calss = await adminServices.addClass(
+        course,
+        title,
+        date,
+        description
+      );
+      res.json({ status: true, calss });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
