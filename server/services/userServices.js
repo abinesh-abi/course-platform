@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const ClassModal = require("../model/ClassModal");
 const courseModel = require("../model/courseModel");
 const userModel = require("../model/userModel");
 
@@ -24,6 +25,14 @@ module.exports = {
               as: "courseDetails",
             },
           },
+          {
+            $lookup: {
+              localField: "course",
+              from: "classes",
+              foreignField: "course",
+              as: "classes",
+            },
+          },
           { $unwind: "$courseDetails" },
         ])
         .then((data) => resolve(data[0]))
@@ -43,6 +52,14 @@ module.exports = {
               as: "courseDetails",
             },
           },
+          {
+            $lookup: {
+              localField: "course",
+              from: "classes",
+              foreignField: "course",
+              as: "classes",
+            },
+          },
           { $unwind: "$courseDetails" },
         ])
         .then((data) => resolve(data[0]))
@@ -53,6 +70,13 @@ module.exports = {
     return new Promise((resolve, reject) => {
       courseModel
         .find({})
+        .then((data) => resolve(data))
+        .catch((error) => reject(error));
+    });
+  },
+  bookClass: (classId, userId) => {
+    return new Promise((resolve, reject) => {
+      ClassModal.updateOne({ _id: classId }, { $addToSet: { users: userId } })
         .then((data) => resolve(data))
         .catch((error) => reject(error));
     });

@@ -2,7 +2,7 @@ const userServices = require("../services/userServices");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const basicConfig = require("../config/basicConfig");
-const { getCourseList } = require("../services/userServices");
+const { getCourseList, bookClass } = require("../services/userServices");
 
 module.exports = {
   registerUser: async (req, res) => {
@@ -135,12 +135,24 @@ module.exports = {
       return res.json({ status: false, message: error.message });
     }
   },
+  // get course
   getCoursesList: async (req, res) => {
     try {
       let courses = await getCourseList();
       res.json({ status: true, courses });
     } catch (error) {
       return res.json({ status: false, message: error.message });
+    }
+  },
+  // book course
+  bookClass: async (req, res) => {
+    try {
+      let clssId = req.params.id
+      let userId = req.body.id
+      let data = await bookClass(clssId,userId);
+      res.json({ status: true, data });
+    } catch (error) {
+      return res.json({ status: false, message: error.message }).status(500)
     }
   },
 };

@@ -10,6 +10,7 @@ import Signup from "./pages/Singup";
 import { refreshToken } from "./redux/actions/userActions";
 import { useEffect } from "react";
 import Classes from "./components/Admin/Classes";
+import Booked from "./components/Admin/Booked";
 
 function App() {
   const isAdmin = window.location.pathname.split("/").includes("admin");
@@ -54,6 +55,7 @@ function Admin() {
             <Route path="/admin" element={<AdminHome />}></Route>
             <Route path="/admin/applications" element={<Applications drawerWidth={drawerWidth} />}></Route>
             <Route path="/admin/classes" element={<Classes />}></Route>
+            <Route path="/admin/booked" element={<Booked />}></Route>
 
           </Routes>
         </BrowserRouter>

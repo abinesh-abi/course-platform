@@ -12,10 +12,6 @@ import Logout from "../components/user/Logout";
 import { useSelector } from "react-redux";
 import CourseItems from "../components/user/CourseItems";
 
-let tempCourse = [
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-  { title: "MongoDB", content: "Basics of mongodb detaild", date: "4/3/43" },
-];
 
 function Home({ drawerWidth }) {
   // const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -25,6 +21,7 @@ function Home({ drawerWidth }) {
   // };
 
   const { user } = useSelector((state) => state);
+  console.log(user,'user---------')
 
   return (
     <div>
@@ -70,10 +67,11 @@ function Home({ drawerWidth }) {
         </Box>
         <Container maxWidth='lg'>
           <Grid  container gap={3}>
-            {user.user.courseDetails.classes.map((val, i) => {
+            {user.user.classes.map((val, i) => {
               return <CourseItems key={i} {...val} />;
             })}
           </Grid>
+          {console.log(user.user.classes)}
         </Container>
       </Box>
     </div>

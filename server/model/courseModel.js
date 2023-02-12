@@ -8,9 +8,6 @@ const schema = new mongoose.Schema(
       trim: true,
       maxlength: 25,
     },
-    classes:{
-      type:Array,
-    }
   },
   {
     timestamps: true,

@@ -9,4 +9,6 @@ router.post('/refresh_token',userControllers.generateAcceTocken)
 
 router.get('/get_course_list',userControllers.getCoursesList)
 
+router.post('/bookClass/:id',userControllers.bookClass)
+
 module.exports = router

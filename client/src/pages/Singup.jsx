@@ -46,7 +46,6 @@ function Signup() {
     // dispatch(registerUser({...data,course:selectedCourse}));
     postDataAPI("/register", {...data,course:selectedCourse})
     .then(({data})=>{
-      console.log(data,'data---------')
       if(data.status){
         naviagate('/login')
       }

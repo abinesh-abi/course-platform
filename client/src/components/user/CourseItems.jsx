@@ -1,12 +1,24 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import { CardActionArea, CardActions } from '@mui/material';
+import * as React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import {
+  Button,
+  CardActionArea,
+  CardActions,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
+import { postDataAPI } from "../../utils/fetchData";
+import { useSelector } from "react-redux";
 
-function CourseItems({title,description,date}) {
-     return (
+function CourseItems({ title, description, date ,_id}) {
+  date = new Date(date).toDateString()
+  return (
     <Card sx={{ maxWidth: 250 }}>
       <CardActionArea>
         <CardMedia
@@ -22,18 +34,68 @@ function CourseItems({title,description,date}) {
           <Typography variant="body1" color="text.secondary">
             {description}
           </Typography>
-          <Typography variant="body1" marginTop={'10px'}>
+          <Typography variant="body1" marginTop={"10px"}>
             {date}
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
-        {/* <Button size="small" color="primary">
-            View
+      <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+        <ConfirmBooking title={title} date={date} id={_id}/>
+        {/* <Button size="small" variant="contained" color="primary">
+          View
         </Button> */}
       </CardActions>
     </Card>
   );
 }
 
-export default CourseItems
+export default CourseItems;
+
+
+/////////////////////////////////
+// confirm booking
+
+function ConfirmBooking({ title, date ,id}) {
+  const { user } = useSelector((state) => state);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  function bookCourse(){
+    postDataAPI('/bookClass/'+id,{id:user.user._id})
+    .then(({data})=>console.log(data))
+  }
+
+  return (
+    <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Book Course
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Booking"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to book the <b>{title}</b> class on <b>{date}</b> ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={bookCourse} autoFocus>
+            Confirm Booking
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}

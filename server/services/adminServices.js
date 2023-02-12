@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const ClassModal = require("../model/ClassModal");
 const courseModel = require("../model/courseModel");
 const userModel = require("../model/userModel");
 
@@ -65,32 +66,37 @@ module.exports = {
     });
   },
   // class
-  addClass: (_id, title, date, description) => {
+  addClass: (course, title, date, description) => {
     return new Promise((resolve, reject) => {
-      courseModel
-        .updateOne(
-          { _id: mongoose.Types.ObjectId(_id) },
-          { $push: { classes: { title, date, description } } }
-        )
+        new ClassModal({title,description,date,course}).save()
         .then(resolve)
         .catch(reject);
     });
   },
   getClasses: () => {
     return new Promise((resolve, reject) => {
-      courseModel
+        ClassModal
         .aggregate([
           { $match: {} },
-          {$unwind:'$classes'},
+          {
+            $lookup: {
+              localField: "course",
+              from: "courses",
+              foreignField: "_id",
+              as: "courseDetails",
+            },
+          },
+          { $unwind: "$courseDetails" },
           {$project:{
-            name:'$classes.title',
-            course:'$name',
-            date:"$classes.date",
-            description:'$classes.description'
+            title:1,
+            course:'$courseDetails.name',
+            date:1,
+            description:1,
+            courseId:'$course'
           }}
         ])
         .then(resolve)
         .catch((error) => reject(error));
     });
   },
-};
+}; //

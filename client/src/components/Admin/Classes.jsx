@@ -6,30 +6,17 @@ import { getDataAPI, patchDataAPI } from "../../utils/fetchData";
 import ClassesForm from "./ClassesForm";
 
 function Classes({ drawerWidth }) {
-  const [classes, setClasses] = useState([])
+  const [classes, setClasses] = useState([]);
   const columns = [
-    { field: "id", headerName: "ID", width: 70, flex: 1 },
-    { field: "name", headerName: "Name", width: 70, flex: 1 },
+    { field: "id", headerName: "NO", width: 70, flex: 1 },
+    { field: "title", headerName: "Title", width: 70, flex: 1 },
     { field: "course", headerName: "Course", width: 70, flex: 1 },
-    { field: "date", headerName: "Date", width: 70, flex: 1 },
-
-    // {
-    //   field: "approved",
-    //   headerName: "Approved",
-    //   width: 70,
-    //   flex: 1,
-    //   renderCell: (props) => {
-    //     return props.row.approved ? (
-    //       <Typography variant="body1" color={"green"}>
-    //         Approved
-    //       </Typography>
-    //     ) : (
-    //       <Button variant="contained" onClick={() => approve(props.row._id)}>
-    //         Approve
-    //       </Button>
-    //     );
-    //   },
-    // },
+    {
+      field: "date",
+      headerName: "Date",
+      width: 70,
+      flex: 1,
+      valueFormatter: ({ value }) => new Date(value).toDateString(), },
   ];
 
   function approve(id) {
