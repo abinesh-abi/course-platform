@@ -69,7 +69,9 @@ function ConfirmBooking({ title, date ,id}) {
 
   function bookCourse(){
     postDataAPI('/bookClass/'+id,{id:user.user._id})
-    .then(({data})=>console.log(data))
+    .then(()=>{
+      handleClose()
+    })
   }
 
   return (

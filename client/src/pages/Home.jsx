@@ -21,7 +21,6 @@ function Home({ drawerWidth }) {
   // };
 
   const { user } = useSelector((state) => state);
-  console.log(user,'user---------')
 
   return (
     <div>
@@ -71,7 +70,6 @@ function Home({ drawerWidth }) {
               return <CourseItems key={i} {...val} />;
             })}
           </Grid>
-          {console.log(user.user.classes)}
         </Container>
       </Box>
     </div>

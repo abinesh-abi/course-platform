@@ -14,6 +14,7 @@ router.patch('/approveUser/:id',adminControllers.approveUser)
 // calss
 router.post('/addClass',adminControllers.addClass)
 router.get('/getClasses',adminControllers.getClasses)
+router.get('/getBookedClasses',adminControllers.getBookedClasses)
 
 
 module.exports = router

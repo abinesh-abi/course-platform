@@ -68,35 +68,76 @@ module.exports = {
   // class
   addClass: (course, title, date, description) => {
     return new Promise((resolve, reject) => {
-        new ClassModal({title,description,date,course}).save()
+      new ClassModal({ title, description, date, course })
+        .save()
         .then(resolve)
         .catch(reject);
     });
   },
   getClasses: () => {
     return new Promise((resolve, reject) => {
-        ClassModal
-        .aggregate([
-          { $match: {} },
-          {
-            $lookup: {
-              localField: "course",
-              from: "courses",
-              foreignField: "_id",
-              as: "courseDetails",
-            },
+      ClassModal.aggregate([
+        { $match: {} },
+        {
+          $lookup: {
+            localField: "course",
+            from: "courses",
+            foreignField: "_id",
+            as: "courseDetails",
           },
-          { $unwind: "$courseDetails" },
-          {$project:{
-            title:1,
-            course:'$courseDetails.name',
-            date:1,
-            description:1,
-            courseId:'$course'
-          }}
-        ])
+        },
+        { $unwind: "$courseDetails" },
+        {
+          $project: {
+            title: 1,
+            course: "$courseDetails.name",
+            date: 1,
+            description: 1,
+            courseId: "$course",
+          },
+        },
+      ])
         .then(resolve)
         .catch((error) => reject(error));
     });
   },
-}; //
+  getBookedCalsses: () => {
+    return new Promise((resolve, reject) => {
+      ClassModal.aggregate([
+        { $match: {} },
+        {$unwind:'$users'},
+        {
+          $lookup: {
+            localField: "course",
+            from: "courses",
+            foreignField: "_id",
+            as: "courseDetails",
+          },
+        },
+        { $unwind: "$courseDetails" },
+        {
+          $lookup: {
+            localField: "users",
+            from: "users",
+            foreignField: "_id",
+            as: "userDetails",
+          },
+        },
+        { $unwind: "$userDetails" },
+        {
+          $project: {
+            title: 1,
+            course: "$courseDetails.name",
+            date: 1,
+            description: 1,
+            courseId: "$course",
+            userName:'$userDetails.name',
+            email:'$userDetails.email'
+          },
+        },
+      ])
+        .then(resolve)
+        .catch((error) => reject(error));
+    });
+  },
+};
