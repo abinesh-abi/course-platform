@@ -1,5 +1,12 @@
-const { getApplicants, approveUser, getClasses, getBookedCalsses } = require("../services/adminServices");
+const {
+  getApplicants,
+  approveUser,
+  getClasses,
+  getBookedCalsses,
+  getEmail,
+} = require("../services/adminServices");
 const adminServices = require("../services/adminServices");
+const {sendEmail} = require("../utils/sendEmail");
 
 module.exports = {
   addCourse: async (req, res) => {
@@ -47,6 +54,10 @@ module.exports = {
   approveUser: async (req, res) => {
     try {
       const id = req.params.id;
+      const {email} = await getEmail(id)
+
+      // send email
+      sendEmail(email);
       const approved = await approveUser(id);
       res.json({ status: true, data: approved });
     } catch (error) {
@@ -78,14 +89,12 @@ module.exports = {
       return res.json({ status: false, message: error.message });
     }
   },
-  getBookedClasses:async(req,res)=>{
+  getBookedClasses: async (req, res) => {
     try {
       let classes = await getBookedCalsses();
       res.json({ status: true, bookeItems: classes });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }
-
-  }
-  
+  },
 };

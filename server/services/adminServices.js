@@ -57,6 +57,13 @@ module.exports = {
         .catch((error) => reject(error));
     });
   },
+  getEmail: (_id) => {
+    return new Promise((resolve, reject) => {
+      userModel.findOne({_id},{email:1})
+      .then(resolve)
+      .catch(reject)
+    })
+  },
   approveUser: (_id) => {
     return new Promise((resolve, reject) => {
       userModel
@@ -105,7 +112,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       ClassModal.aggregate([
         { $match: {} },
-        {$unwind:'$users'},
+        { $unwind: "$users" },
         {
           $lookup: {
             localField: "course",
@@ -131,8 +138,8 @@ module.exports = {
             date: 1,
             description: 1,
             courseId: "$course",
-            userName:'$userDetails.name',
-            email:'$userDetails.email'
+            userName: "$userDetails.name",
+            email: "$userDetails.email",
           },
         },
       ])
