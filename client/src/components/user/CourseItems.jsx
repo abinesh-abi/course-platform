@@ -15,10 +15,12 @@ import {
 } from "@mui/material";
 import { postDataAPI } from "../../utils/fetchData";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 function CourseItems({ title, description, date, _id, booked }) {
+  const [isBooked, setIsBooked] = useState(booked.includes(_id))
   date = new Date(date).toDateString();
-  let isBooked = booked.includes(_id);
+   
   return (
     <Card sx={{ maxWidth: 250 }}>
       <CardActionArea>
@@ -46,10 +48,9 @@ function CourseItems({ title, description, date, _id, booked }) {
           date={date}
           id={_id}
           isBooked={isBooked}
+          setIsBooked={setIsBooked}
         />
-        {/* <Button size="small" variant="contained" color="primary">
-          View
-        </Button> */}
+
       </CardActions>
     </Card>
   );
@@ -60,7 +61,7 @@ export default CourseItems;
 /////////////////////////////////
 // confirm booking
 
-function ConfirmBooking({ title, date, id, isBooked }) {
+function ConfirmBooking({ title, date, id, isBooked ,setIsBooked }) {
   const { user } = useSelector((state) => state);
   const [open, setOpen] = React.useState(false);
 
@@ -75,15 +76,16 @@ function ConfirmBooking({ title, date, id, isBooked }) {
   function bookCourse() {
     postDataAPI("/bookClass/" + id, { id: user.user._id }).then(() => {
       handleClose();
+      setIsBooked(true)
     });
   }
 
   return (
     <div>
       {isBooked ? (
-        <Button variant="outlined" >
+        <Typography variant="button" fontSize='1rem' color={'green'} >
           Booked
-        </Button>
+        </Typography>
       ) : (
         <Button variant="outlined" onClick={handleClickOpen}>
           Book Course
