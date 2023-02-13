@@ -61,13 +61,14 @@ function Home({ drawerWidth }) {
 
       <Box>
         <Toolbar />
-        <Box display={"flex"} justifyContent="center" marginTop={"40px"}>
+        <Box display={"flex"} justifyContent="center" marginTop={"40px"} marginBottom='20px'>
           <Typography variant="h4">{user.user.courseDetails?.name}</Typography>
         </Box>
         <Container maxWidth='lg'>
+          <Typography variant="h5" margin={'10px'} >Booked Courses</Typography>
           <Grid  container gap={3}>
             {user.user.classes.map((val, i) => {
-              return <CourseItems key={i} {...val} />;
+              return <CourseItems key={i} {...val} booked={user.user.booked} />;
             })}
           </Grid>
         </Container>

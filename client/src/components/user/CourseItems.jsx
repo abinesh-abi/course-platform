@@ -16,8 +16,9 @@ import {
 import { postDataAPI } from "../../utils/fetchData";
 import { useSelector } from "react-redux";
 
-function CourseItems({ title, description, date ,_id}) {
-  date = new Date(date).toDateString()
+function CourseItems({ title, description, date, _id, booked }) {
+  date = new Date(date).toDateString();
+  let isBooked = booked.includes(_id);
   return (
     <Card sx={{ maxWidth: 250 }}>
       <CardActionArea>
@@ -40,7 +41,12 @@ function CourseItems({ title, description, date ,_id}) {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <ConfirmBooking title={title} date={date} id={_id}/>
+        <ConfirmBooking
+          title={title}
+          date={date}
+          id={_id}
+          isBooked={isBooked}
+        />
         {/* <Button size="small" variant="contained" color="primary">
           View
         </Button> */}
@@ -51,11 +57,10 @@ function CourseItems({ title, description, date ,_id}) {
 
 export default CourseItems;
 
-
 /////////////////////////////////
 // confirm booking
 
-function ConfirmBooking({ title, date ,id}) {
+function ConfirmBooking({ title, date, id, isBooked }) {
   const { user } = useSelector((state) => state);
   const [open, setOpen] = React.useState(false);
 
@@ -67,18 +72,24 @@ function ConfirmBooking({ title, date ,id}) {
     setOpen(false);
   };
 
-  function bookCourse(){
-    postDataAPI('/bookClass/'+id,{id:user.user._id})
-    .then(()=>{
-      handleClose()
-    })
+  function bookCourse() {
+    postDataAPI("/bookClass/" + id, { id: user.user._id }).then(() => {
+      handleClose();
+    });
   }
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Book Course
-      </Button>
+      {isBooked ? (
+        <Button variant="outlined" >
+          Booked
+        </Button>
+      ) : (
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Book Course
+        </Button>
+      )}
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -88,7 +99,8 @@ function ConfirmBooking({ title, date ,id}) {
         <DialogTitle id="alert-dialog-title">{"Confirm Booking"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to book the <b>{title}</b> class on <b>{date}</b> ?
+            Are you sure you want to book the <b>{title}</b> class on{" "}
+            <b>{date}</b> ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

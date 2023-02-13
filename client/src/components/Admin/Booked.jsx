@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { getDataAPI } from "../../utils/fetchData";
-import ClassesForm from "./ClassesForm";
 import ExportToExcel from "../comon/ExportToExcel";
 import ExportToPdf from "../comon/ExportToPdf";
 
@@ -47,10 +46,6 @@ export default function Booked({ drawerWidth }) {
         }}
       >
         <Toolbar />
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {/* add course form */}
-          <ClassesForm />
-        </Box>
         <div style={{ height: 400, width: "100%", marginTop: "20px" }}>
           {/* <ExportToExcel  */}
           <Box display={"flex"} gap="12px" marginBottom="5px">

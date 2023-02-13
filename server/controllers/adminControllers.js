@@ -69,13 +69,13 @@ module.exports = {
   addClass: async (req, res) => {
     try {
       let { course, date, title, description } = req.body;
-      let calss = await adminServices.addClass(
+      let cls = await adminServices.addClass(
         course,
         title,
         date,
         description
       );
-      res.json({ status: true, calss });
+      res.json({ status: true, cls });
     } catch (error) {
       return res.json({ status: false, message: error.message });
     }

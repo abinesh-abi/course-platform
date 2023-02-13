@@ -27,6 +27,9 @@ const schema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    booked:{
+        type:Array
+    }
 },{
     timestamps:true
 })

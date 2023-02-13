@@ -2,7 +2,7 @@ import { Box, Toolbar } from "@mui/material";
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useEffect } from "react";
-import { getDataAPI, patchDataAPI } from "../../utils/fetchData";
+import { getDataAPI } from "../../utils/fetchData";
 import ClassesForm from "./ClassesForm";
 
 function Classes({ drawerWidth }) {
@@ -19,20 +19,6 @@ function Classes({ drawerWidth }) {
       valueFormatter: ({ value }) => new Date(value).toDateString(), },
   ];
 
-  function approve(id) {
-    patchDataAPI("/admin/approveUser/" + id).then(({ data }) => {
-      if (data.status) {
-        setClasses((state) => {
-          return state.map((val) => {
-            if (val._id === id) {
-              return { ...val, approved: true };
-            }
-            return val;
-          });
-        });
-      }
-    });
-  }
 
   useEffect(() => {
     getDataAPI("/admin/getClasses").then(({ data }) => {
@@ -59,7 +45,7 @@ function Classes({ drawerWidth }) {
         <Toolbar />
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {/* add course form */}
-          <ClassesForm />
+          <ClassesForm updateList={setClasses} />
         </Box>
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid

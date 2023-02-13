@@ -21,18 +21,17 @@ const style = {
   p: 4,
 };
 
-export default function ClassesForm({updateList}) {
+export default function ClassesForm({ updateList }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
-  const [allCourses, setAllCourses] = useState([])
-  const [selectedCourse, setSelectedCourse] = useState('')
+  const [allCourses, setAllCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState("");
 
-  useEffect(()=>{
-    getDataAPI('/get_course_list')
-    .then(({data})=>{
-      setAllCourses(data.courses)
-    })
-  },[])
+  useEffect(() => {
+    getDataAPI("/get_course_list").then(({ data }) => {
+      setAllCourses(data.courses);
+    });
+  }, []);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,14 +43,15 @@ export default function ClassesForm({updateList}) {
   } = useForm();
 
   const onSubmit = (value) => {
-    if(!selectedCourse)return setError('Chose Any one of the course')
-    postDataAPI("/admin/addClass", {...value,course:selectedCourse})
+    if (!selectedCourse) return setError("Chose Any one of the course");
+    postDataAPI("/admin/addClass", { ...value, course: selectedCourse })
       .then(({ data }) => {
-        console.log(data,'data---------------')
-        // if (data.status) {
-        //   updateList((state) => [data?.course, ...state]);
+        if (data.status) {
+          updateList((state) => {
+             return [{...data?.cls,id:state.length+1}, ...state]
+          });
           handleClose();
-        // } else setError(data.message);
+        } else setError(data.message);
       })
       .catch((err) => setError(err.message));
   };
@@ -108,8 +108,10 @@ export default function ClassesForm({updateList}) {
                   })}
                 />
                 <Typography paddingTop={"2px"} color={"error"}>
-                  {errors.title?.type === "required" && "Class Name is required"}
-                  {errors.title?.type === "pattern" && "Enter valied Charecters"}
+                  {errors.title?.type === "required" &&
+                    "Class Name is required"}
+                  {errors.title?.type === "pattern" &&
+                    "Enter valied Charecters"}
                 </Typography>
 
                 {/* selct course dropdown */}
@@ -132,8 +134,10 @@ export default function ClassesForm({updateList}) {
                   })}
                 />
                 <Typography paddingTop={"2px"} color={"error"}>
-                  {errors.description?.type === "required" && "Class Name is required"}
-                  {errors.description?.type === "pattern" && "Enter valied Charecters"}
+                  {errors.description?.type === "required" &&
+                    "Class Name is required"}
+                  {errors.description?.type === "pattern" &&
+                    "Enter valied Charecters"}
                 </Typography>
 
                 <Typography paddingTop={"2px"}>Choose the date</Typography>

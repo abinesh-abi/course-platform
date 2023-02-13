@@ -77,6 +77,7 @@ module.exports = {
   bookClass: (classId, userId) => {
     return new Promise((resolve, reject) => {
       ClassModal.updateOne({ _id: classId }, { $addToSet: { users: userId } })
+      userModel.updateOne({_id:userId},{$addToSet:{booked:classId}})
         .then((data) => resolve(data))
         .catch((error) => reject(error));
     });
