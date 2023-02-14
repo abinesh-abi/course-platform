@@ -1,8 +1,10 @@
 import {
   AppBar,
+  Button,
   Container,
   CssBaseline,
   Grid,
+  Modal,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -12,6 +14,14 @@ import Logout from "../components/user/Logout";
 import { useSelector } from "react-redux";
 import CourseItems from "../components/user/CourseItems";
 
+import dayjs from "dayjs";
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { useState } from "react";
+
+import ClearIcon from "@mui/icons-material/Clear";
 
 function Home({ drawerWidth }) {
   // const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -21,6 +31,7 @@ function Home({ drawerWidth }) {
   // };
 
   const { user } = useSelector((state) => state);
+  const [pickDate, setpickDate] = useState(null);
 
   return (
     <div>
@@ -61,15 +72,50 @@ function Home({ drawerWidth }) {
 
       <Box>
         <Toolbar />
-        <Box display={"flex"} justifyContent="center" marginTop={"40px"} marginBottom='20px'>
-          <Typography variant="h4">{user.user.courseDetails?.name}</Typography>
+        <Box
+          display={"flex"}
+          justifyContent="center"
+          marginTop={"40px"}
+          marginBottom="2px"
+        >
+          <Box>
+            <Typography variant="h4">
+              {user.user.courseDetails?.name}
+            </Typography>
+            {/* date pic */}
+            {pickDate ? (
+              <Button
+                onClick={() => setpickDate(null)}
+                variant="outlined"
+                color="error"
+              >
+                Clear Date <ClearIcon />
+              </Button>
+            ) : (
+              <DatePicker setpickDate={setpickDate} />
+            )}
+          </Box>
         </Box>
-        <Container maxWidth='lg'>
-          <Typography variant="h5" margin={'10px'} >Booked Courses</Typography>
-          <Grid  container gap={3}>
-            {user.user.classes.map((val, i) => {
-              return <CourseItems key={i} {...val} booked={user.user.booked} />;
-            })}
+        <Container maxWidth="lg">
+          <Typography variant="h5" margin={"10px"}>
+            Booked Courses
+          </Typography>
+          <Grid container gap={3}>
+            {pickDate &&
+              user.user.classes.map((val, i) => {
+                return (
+                  new Date(pickDate).toDateString() ===
+                    new Date(val.date).toDateString() && (
+                    <CourseItems key={i} {...val} booked={user.user.booked} />
+                  )
+                );
+              })}
+            {!pickDate &&
+              user.user.classes.map((val, i) => {
+                return (
+                  <CourseItems key={i} {...val} booked={user.user.booked} />
+                );
+              })}
           </Grid>
         </Container>
       </Box>
@@ -78,3 +124,57 @@ function Home({ drawerWidth }) {
 }
 
 export default Home;
+
+function DatePicker({ setpickDate }) {
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "white",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        sx={{ marginTop: "10px" }}
+        onClick={handleOpen}
+      >
+        Choose Date
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Choose date
+          </Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <StaticDatePicker
+              displayStaticWrapperAs="desktop"
+              openTo="day"
+              minDate={dayjs(
+                new Date(Date.now()).toLocaleDateString().split("/").join("-")
+              )}
+              onChange={(newValue) => {
+                setpickDate(newValue.toISOString());
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
